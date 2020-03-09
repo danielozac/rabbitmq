@@ -1,0 +1,27 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Java template
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+
+!/.idea/
+!/rabbitmq-replay-to.iml
+!/.idea/
+!/server-b.iml
+!/server-a.iml
+!/target/

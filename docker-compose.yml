@@ -1,0 +1,50 @@
+version: "3.1"
+services:
+  rabbitmq:
+    image: rabbitmq:alpine
+    networks:
+      - backend
+    restart: on-failure
+
+  memcached:
+    image: memcached:alpine
+    networks:
+      - backend
+    restart: on-failure
+
+  server-a:
+    image: com.example/server-a:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+    depends_on:
+      - memcached
+      - rabbitmq
+    restart: on-failure
+    environment:
+      RABBITMQ_HOST: "${RABBITMQ_HOST}"
+      RABBITMQ_PORT: "${RABBITMQ_PORT}"
+      RABBITMQ_USER: "${RABBITMQ_USER}"
+      RABBITMQ_PASSWORD: "${RABBITMQ_PASSWORD}"
+      RABBITMQ_TIMEOUT: "${RABBITMQ_TIMEOUT}"
+      MEMCACHED_HOST: "${MEMCACHED_HOST}"
+      MEMCACHED_PORT: "${MEMCACHED_PORT}"
+
+  server-b:
+    image: com.example/server-b:0.0.1-SNAPSHOT
+    networks:
+      - backend
+    depends_on:
+      - rabbitmq
+      - server-a
+    restart: on-failure
+    environment:
+      RABBITMQ_HOST: "${RABBITMQ_HOST}"
+      RABBITMQ_PORT: "${RABBITMQ_PORT}"
+      RABBITMQ_USER: "${RABBITMQ_USER}"
+      RABBITMQ_PASSWORD: "${RABBITMQ_PASSWORD}"
+      RABBITMQ_TIMEOUT: "${RABBITMQ_TIMEOUT}"
+
+networks:
+  backend:
